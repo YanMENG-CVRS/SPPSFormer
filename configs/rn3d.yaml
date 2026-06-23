@@ -1,0 +1,160 @@
+#全新的patch
+#需要改进patch和noise生成patch
+#将原先生成的patch经过kmeans处理，变成多个patch
+#重新调整patch的分割，所有粗糙patch均采用kmeans(k = n / 5)
+#恢复原始尺寸
+#修改query数量400->100
+#KAN
+train:
+  seed: 200
+  epochs: 500
+  interval: 5
+  pretrain:
+
+
+test:
+  seed: 1999
+  test_topk_per_scene: 100
+  test_score_thresh: 0.0
+  test_npoint_thresh: 100
+#  每个检测结果包含至少 100 个点，
+#  用于潜在的点云相关任务的过滤。
+dataloader:
+  train:
+    batch_size: 4
+    num_workers: 16
+    persistent_workers: True
+  val:
+    batch_size: 1
+    num_workers: 4
+    persistent_workers: True
+  test:
+    batch_size: 1
+    num_workers: 4
+    persistent_workers: True
+
+data:
+  train:
+    type: b3d
+    data_root: data/rn3d
+    prefix: train
+#    训练数据集对应的文件前缀。
+    suffix: _train3.pth
+#    训练数据集文件后缀，通常为已处理好的点云实例分割文件
+#    need create
+    training: True
+    mode: 4
+    with_elastic: False
+    use_xyz: True
+    voxel_cfg:
+#      体素化配置：
+      scale: 50
+#      体素尺度
+      spatial_shape: [512, 1024]
+#      体素化后的空间形状（长宽高）
+      max_npoint: 250000
+#      每个体素内最大点数限制
+    features:
+      - 'boundary'
+      - 'linearity'
+      - 'planarity'
+      - 'scattering'
+      - 'verticality'
+      - 'curvature'
+      - 'log_length'
+      - 'log_surface'
+      - 'log_volume'
+  val:
+    type: b3d
+    data_root: data/rn3d
+    prefix: val
+    suffix: _train3.pth
+    training: False
+    mode: 4
+    with_elastic: False
+    use_xyz: True
+    voxel_cfg:
+      scale: 50
+      spatial_shape: [512, 1024]
+      max_npoint: 250000
+    features:
+      - 'boundary'
+      - 'linearity'
+      - 'planarity'
+      - 'scattering'
+      - 'verticality'
+      - 'curvature'
+      - 'log_length'
+      - 'log_surface'
+      - 'log_volume'
+  test:
+    type: b3d
+    data_root: data/rn3d
+    prefix: val
+    suffix: _train3.pth
+    training: False
+    mode: 4
+    with_elastic: False
+    use_xyz: True
+    voxel_cfg:
+      scale: 50
+      spatial_shape: [512, 1024]
+      max_npoint: 250000
+    features:
+      - 'boundary'
+      - 'linearity'
+      - 'planarity'
+      - 'scattering'
+      - 'verticality'
+      - 'curvature'
+      - 'log_length'
+      - 'log_surface'
+      - 'log_volume'
+
+model:
+  input_channel: 12
+  blocks: 5
+#  主干网络（backbone）块数。
+  block_reps: 2
+  media: 32
+  normalize_before: True
+#  是否在模型内部某些层之前进行归一化处理。
+  return_blocks: True
+  pool: mean
+  num_class: 1
+  decoder:
+    num_layer: 6
+    num_query: 100
+#   as mentioned in this paper,400 is better on scannet
+#   but on small data sets,would 100 be better
+    d_model: 256
+    nhead: 8
+    hidden_dim: 1024
+    dropout: 0
+    activation_fn: gelu
+    iter_pred: True
+    attn_mask: True
+    pe: False
+    KAN:  True
+    KAN_gridsize: 5
+  criterion:
+    loss_weight: [0.3, 1.0, 1.0, 0.5]
+    cost_weight: [0.3, 1.0, 1.0]
+    non_object_weight: 0.1
+  test_cfg:
+    topk_insts: 100
+    score_thr: 0.0
+    npoint_thr: 100
+  norm_eval: False
+  fix_module: []
+
+optimizer:
+  type: AdamW
+  lr: 0.0001
+  weight_decay: 0.05
+
+lr_scheduler:
+  type: PolyLR
+  max_iters: 2048
+  power: 0.9
+  constant_ending: 0.0

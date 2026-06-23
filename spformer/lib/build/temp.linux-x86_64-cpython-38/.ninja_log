@@ -1,0 +1,4 @@
+# ninja log v5
+1	19060	1714228794224514242	/home/hubu/summer_2023/project/SPFormer-main/spformer/lib/build/temp.linux-x86_64-cpython-38/pointgroup_ops/src/cuda.o	db83e3aacec9893b
+1	20044	1714228795208545545	/home/hubu/summer_2023/project/SPFormer-main/spformer/lib/build/temp.linux-x86_64-cpython-38/pointgroup_ops/src/pointgroup_ops.o	f46d5b28e0791b89
+2	22680	1714228797836629148	/home/hubu/summer_2023/project/SPFormer-main/spformer/lib/build/temp.linux-x86_64-cpython-38/pointgroup_ops/src/pointgroup_ops_api.o	f3499dc1f5f9771c
