@@ -2,7 +2,7 @@ import subprocess
 import os
 from tqdm import tqdm
 
-program_path = "/data/planeExtractionTest.exe"
+program_path = "/data/planeExtraction.exe"
 
 input_folder = r"data\rn3d\train"
 output_folder = r"data\rn3d\train_origin"
