@@ -1,14 +1,14 @@
   # SPPSFormer
-这是本篇论文的pytorch实现
+This is the PyTorch implementation of this paper.
 > SPPSFormer: High-quality Superpoint-based Transformer for Roof Plane Instance Segmentation from Point Clouds
 >
 > Cheng Zeng, Xiatian Qi, Huifan Wang, Kai Sun, Pengcheng Zhong, Qiao Xu, Yan Meng, Yangjie Sun and Yuxuan Liu
 
 ## Dataset
 
-The real building point clouds are selected from [RoofN3D](https://github.com/sarthakTUM/roofn3d).
+The real building point clouds are selected from [RoofN3D](https://roofn3d.gis.tu-berlin.de/).
 
-如果你是直接从RoofN3D官网下载数据集，请按照我们论文所述的方法进行处理，并按照以下格式放置数据集
+If you download the dataset directly from the RoofN3D official website, please process it following the method described in our paper and place the dataset in the following structure.
 
 ```
 SPPSFormer-main
@@ -18,17 +18,17 @@ SPPSFormer-main
 │   │   ├── val
 ```
 
-放置好后，依次运行
+After placing the dataset, run the following commands in order:
 
 ```
-python data/superpoint1.py
-python data/superpoint2.py
+python data/superpoint_stage1.py
+python data/superpoint_stage2.py
 python data/prepare_data.py
 ```
 
-即可生成本文所使用的带有超点标签的文件以及模型输入所需要的pth文件
+This will generate the superpoint-labeled files used in this paper and the .pth files required for model input.
 
-当然，你也可以使用我们已经处理好的数据集（包含txt和pth文件），数据集下载链接：**（记得加百度网盘链接）**，并按照以下格式放置数据集
+Alternatively, you can use our pre-processed dataset (including .txt and .pth files), which is available for download at the following Baidu Yun link: [Dataset](https://pan.baidu.com/s/1Sf5QLm9Jz-0y0z7U_JZBUg?pwd=piuu) . After downloading, please place the dataset in the following directory structure:
 
 ```
 SPPSFormer-main
@@ -46,16 +46,14 @@ Requirements
 - Pytorch 1.10
 - CUDA 10.x or higher
 
-下面将会给出创建示例
-
-创建conda环境
+Below is an example of how to create a Conda environment:
 
 ```
 conda create -n sppsformer python=3.8
 conda activate sppsformer
 ```
 
-安装依赖
+Install the dependencies:
 
 ```
 conda install pytorch==1.10.0 torchvision==0.11.0 torchaudio==0.10.0 cudatoolkit=11.3 -c pytorch
@@ -67,7 +65,7 @@ conda install cudatoolkit=11.7.0 cudnn=8.2.1.32 -y
 pip install -r requirements.txt
 ```
 
-安装pointgroup_ops
+Install pointgroup_ops:
 
 ```
 cd spformer/lib
@@ -80,18 +78,18 @@ python setup.py develop
 python tools/train.py configs/rn3d.yaml
 ```
 
-生成的权重文件会保存在exps目录下面
+The resulting model weights will be stored in the exps folder.
 
 ## Testing and visualization
 
-测试也可以使用我们已经训练好的权重文件，权重文件下载路径：**（记得加百度网盘链接）**
+For testing, you can also use our pre-trained weights, which are available for download at the following Baidu Yun link:[Model weights](https://pan.baidu.com/s/1DuPhHMpgtb8qRbry1ApbBQ?pwd=2tha)
 
 ```
 python tools/test.py configs/rn3d.yaml exps/rn3d/epoch_0100.pth --out out_rn3d
 python tools/visualize_X.py
 ```
 
-最后带有实例标签和预测实例标签的txt文件保存在代码指定目录下面，若想查看可视化，请使用cloudcompare等软件进行
+Finally, the txt files containing the ground-truth instance labels and predicted instance labels will be saved in the directory specified in the code. For visualization, please use software such as CloudCompare.
 
 ## Post-processing
 
