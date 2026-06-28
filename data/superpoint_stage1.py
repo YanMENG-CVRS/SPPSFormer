@@ -2,10 +2,10 @@ import subprocess
 import os
 from tqdm import tqdm
 
-program_path = "/data/planeExtraction.exe"
+program_path = "E:/data/planeExtraction.exe"
 
-input_folder = r"data\rn3d\train"
-output_folder = r"data\rn3d\train_origin"
+input_folder = r"E:data\rn3d\train"
+output_folder = r"E:data\rn3d\train_origin"
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
